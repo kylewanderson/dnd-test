@@ -1,5 +1,5 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
-import * as jsPDF from 'jspdf';
+import { Component } from '@angular/core';
+import { HttpService } from './http.service';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +7,7 @@ import * as jsPDF from 'jspdf';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'app';
+  header = { companyName: '', managerName: '', reportName: '', positionTitle: '', reviewDate: '' };
   questions = [
     'Completion of high value rocks',
     'Impact on My Team',
@@ -16,7 +16,7 @@ export class AppComponent {
   ];
   workingQuestion = '';
 
-  @ViewChild('mainContainer') mainContainer: ElementRef;
+  constructor(private httpService: HttpService) { }
 
   addQuestion() {
     this.questions.push(this.workingQuestion);
@@ -28,13 +28,6 @@ export class AppComponent {
   }
 
   downloadPdf() {
-    let html = this.mainContainer.nativeElement;
-    let doc = new jsPDF();
-    doc.fromHTML(html.innerHTML, 15, 15, {
-      'elementHandlers': (e) => console.log(e)
-    })
-
-    //doc.text('Snargle', 10, 10);
-    doc.save('test.pdf');
+    this.httpService.postFormRequest({header: this.header, questions: this.questions});
   }
 }
