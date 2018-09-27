@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpService } from './http.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-root',
@@ -28,6 +29,9 @@ export class AppComponent {
   }
 
   downloadPdf() {
-    this.httpService.postFormRequest({header: this.header, questions: this.questions});
+    this.httpService.postFormRequest({header: this.header, questions: this.questions}).subscribe(data => {
+      saveAs(data, `Review Template.pdf`);
+      console.log(data);
+    });
   }
 }

@@ -3,11 +3,14 @@ import { Injectable } from '@angular/core';
 import { PdfFormRequest } from './pdf-form-request';
 
 const jsonOptions = {
-  headers: new HttpHeaders({'Content-Type': 'application/json'}),
-  withCredentials: true
+  headers: new HttpHeaders({'Content-Type': 'application/json'})
 };
 
-const url = 'https://localhost:8443/pdfservice';
+const blobOptions: any = {
+  responseType: 'blob'
+}
+
+const url = 'http://localhost:8081';
 
 @Injectable({providedIn: 'root'})
 export class HttpService {
@@ -15,6 +18,6 @@ export class HttpService {
 
   postFormRequest(request: PdfFormRequest) {
     console.log('request', request);
-    return this.http.post(`${url}/api/form`,request,jsonOptions);
+    return this.http.post(`${url}/api/generate/template`,request, blobOptions);
   }
 }
